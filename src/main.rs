@@ -19,17 +19,12 @@ fn main() {
         }
     }
     println!("seed with x = {CELLS} and y = {COLUMNS}: {seed}");
-
-    let mut generationcount: u32 = 0;
-    loop {
-        print_cells(grid, generationcount);
-        grid = generation(grid);
-        thread::sleep(Duration::from_millis(500));
-        generationcount += 1;
-    }
+    advance(grid, 0);
+    
 }
 
-fn generation(grid: [[u8; CELLS]; COLUMNS]) -> [[u8; CELLS]; COLUMNS] {
+fn advance(grid: [[u8; CELLS]; COLUMNS], generation: u32) {
+    print_cells(grid, generation);
     let insert: u8 = 0;
     let mut newgrid = [[insert; CELLS]; COLUMNS];
     for y in 0..COLUMNS {
@@ -67,7 +62,8 @@ fn generation(grid: [[u8; CELLS]; COLUMNS]) -> [[u8; CELLS]; COLUMNS] {
             }
         }
     }
-    newgrid
+    thread::sleep(Duration::from_millis(500));
+    advance(newgrid, generation +1);
 }
 
 fn print_cells(grid: [[u8; CELLS]; COLUMNS], generation: u32) {
